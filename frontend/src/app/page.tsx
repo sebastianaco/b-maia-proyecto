@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-
 interface Article {
   id: number;
   title: string;
@@ -10,7 +9,6 @@ interface Article {
   category_name: string;
   created_at: string;
 }
-
 
 async function getArticles(): Promise<Article[]> {
   try {
@@ -25,14 +23,13 @@ async function getArticles(): Promise<Article[]> {
 }
 
 export default async function Home() {
-  
   const articles = await getArticles();
 
   return (
     <main className="min-h-screen bg-gray-50">
       
       {/* --- SECCIÓN 1: BIENVENIDA (Hero) --- */}
-      <section className="bg-white pt-16 pb-8">
+      <section className="bg-white pt-12 pb-8">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-6 tracking-tight">
             b-maia: El corazón de la apicultura
@@ -49,11 +46,10 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* --- SECCIÓN 2: BANNER (Imagen Grande) --- */}
+      {/* --- SECCIÓN 2: BANNER --- */}
       <section className="bg-white pb-16">
         <div className="container mx-auto px-4">
             <div className="relative h-64 md:h-96 w-full rounded-2xl overflow-hidden shadow-xl mt-8">
-                {/* Usamos tu imagen local */}
                 <img
                   src="/banner.jpg" 
                   alt="Abejas en el panal"
@@ -63,10 +59,9 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* --- SECCIÓN 3: ÚLTIMAS NOTICIAS (¡Volvieron!) --- */}
+      {/* --- SECCIÓN 3: ÚLTIMAS NOTICIAS --- */}
       <section className="container mx-auto px-4 py-12" id="noticias">
         
-        {/* Título de la sección */}
         <div className="flex items-center gap-4 mb-8">
             <div className="w-2 h-10 bg-yellow-500 rounded-sm"></div>
             <h2 className="text-3xl font-bold text-gray-800 font-serif">
@@ -74,7 +69,6 @@ export default async function Home() {
             </h2>
         </div>
 
-        {/* Grilla de Artículos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.length > 0 ? (
             articles.map((article) => (
@@ -82,7 +76,6 @@ export default async function Home() {
                 key={article.id}
                 className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col"
               >
-                {/* Imagen de la noticia */}
                 <div className="relative h-56 w-full bg-gray-200">
                   {article.image ? (
                     <img
@@ -95,13 +88,11 @@ export default async function Home() {
                         <span className="text-4xl">🐝</span>
                     </div>
                   )}
-                  {/* Etiqueta de Categoría */}
                   <span className="absolute top-4 left-4 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
                     {article.category_name || "General"}
                   </span>
                 </div>
 
-                {/* Contenido (Título + Resumen) */}
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="mb-4">
                     <h3 className="text-xl font-bold text-gray-900 mb-2 font-serif leading-tight hover:text-yellow-600 transition-colors">
@@ -114,7 +105,6 @@ export default async function Home() {
                     </p>
                   </div>
                   
-                  {/* Footer de la tarjeta (Fecha + Link) */}
                   <div className="mt-auto pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-500">
                     <span>{new Date(article.created_at).toLocaleDateString()}</span>
                     <Link 
@@ -128,7 +118,6 @@ export default async function Home() {
               </article>
             ))
           ) : (
-            // Mensaje si no hay noticias
             <div className="col-span-full text-center py-20 bg-white rounded-lg border border-dashed border-gray-300">
               <p className="text-gray-500 text-lg">
                 No hay noticias recientes. <br/>

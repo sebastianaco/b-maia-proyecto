@@ -31,8 +31,10 @@ class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles', verbose_name="Autor")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='articles', verbose_name="Categoría")
     
-    # Contenido
-    image = models.ImageField(upload_to='articles/', verbose_name="Imagen Destacada", blank=True, null=True)
+    # --- CAMBIO IMPORTANTE AQUÍ ---
+    # Cambiamos ImageField por URLField para aceptar links de internet (Unsplash, etc.)
+    image = models.URLField(max_length=500, verbose_name="URL Imagen Destacada", blank=True, null=True)
+    
     excerpt = models.TextField(verbose_name="Resumen/Bajada", help_text="Texto corto para la portada")
     content = models.TextField(verbose_name="Contenido Completo")
     

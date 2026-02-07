@@ -13,10 +13,8 @@ interface Category {
 export default function Navbar() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isOpen, setIsOpen] = useState(false); 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
   const pathname = usePathname();
 
-  // Traemos las categorías al cargar la página en el navegador
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -32,125 +30,114 @@ export default function Navbar() {
     fetchCategories();
   }, []);
 
-  
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <nav className="bg-gray-900 text-white shadow-xl sticky top-0 z-50 border-b-4 border-yellow-500">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
+    <nav className="bg-yellow-50 text-gray-900 shadow-md sticky top-0 z-50 border-b-4 border-yellow-600">
+      
+      <style jsx>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+
+      
+      <div className="w-full px-4 md:px-6">
+        
+        
+        <div className="flex items-center justify-between h-16">
           
-          {/* --- LOGO --- */}
-          <Link href="/" className="flex items-center gap-2 group z-50" onClick={closeMenu}>
-            <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-transform">
-              🐝
-            </div>
-            <span className="text-2xl md:text-3xl font-serif font-bold text-white tracking-wide">
-              b-maia
-            </span>
+          
+          <Link href="/" className="flex items-center shrink-0 z-50" onClick={closeMenu}>
+            <img 
+                src="/logo-maia.png" 
+                alt="Logo MaiA" 
+                className="h-10 w-auto object-contain hover:scale-105 transition-transform duration-300" 
+            />
           </Link>
 
-          {/* --- MENÚ DE ESCRITORIO (Se oculta en móvil) --- */}
-          <div className="hidden md:flex items-center space-x-8">
+          
+          <div className="hidden md:flex items-center justify-center gap-5 overflow-x-auto no-scrollbar flex-1 px-4">
+            
             <Link 
                 href="/" 
-                className={`font-bold hover:text-yellow-400 transition-colors ${pathname === '/' ? 'text-yellow-500' : 'text-gray-300'}`}
+                className={`font-bold uppercase text-xs tracking-wide hover:text-yellow-600 transition-colors shrink-0 ${pathname === '/' ? 'text-yellow-700 underline decoration-2 underline-offset-4' : 'text-gray-700'}`}
             >
-              Inicio
+              INICIO
             </Link>
 
-            
-            <div className="relative group h-20 flex items-center cursor-pointer">
-                <span className="font-bold text-gray-300 group-hover:text-yellow-400 transition-colors flex items-center gap-1">
-                    NOTICIAS ▼
-                </span>
-                
-                <div className="absolute top-20 left-0 w-56 bg-white text-gray-800 rounded-b-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    <div className="py-2">
-                        {categories.length > 0 ? categories.map((cat) => (
-                            <Link 
-                                key={cat.id}
-                                href={cat.name.toLowerCase().includes('noticias') ? '/noticias' : `/categoria/${cat.slug}`}
-                                className="block px-6 py-3 hover:bg-yellow-100 hover:text-yellow-800 transition-colors text-sm font-semibold"
-                            >
-                                🍯 {cat.name}
-                            </Link>
-                        )) : (
-                            <span className="block px-6 py-3 text-xs text-gray-400">Cargando...</span>
-                        )}
-                    </div>
-                </div>
-            </div>
+            {categories.length > 0 ? categories.map((cat) => (
+                <Link 
+                    key={cat.id}
+                    href={cat.name.toLowerCase().includes('noticias') ? '/noticias' : `/categoria/${cat.slug}`}
+                    className={`font-bold uppercase text-xs tracking-wide hover:text-yellow-600 transition-colors whitespace-nowrap shrink-0 ${pathname.includes(cat.slug) ? 'text-yellow-700' : 'text-gray-700'}`}
+                >
+                    {cat.name}
+                </Link>
+            )) : (
+                <span className="text-[10px] text-gray-400 animate-pulse whitespace-nowrap">Cargando...</span>
+            )}
 
+          </div>
+
+          
+          <div className="hidden md:flex shrink-0">
             <Link 
                 href="/login" 
-                className="bg-yellow-500 text-gray-900 px-6 py-2 rounded-full font-bold hover:bg-yellow-400 transition-colors shadow-md flex items-center gap-2"
+                className="bg-yellow-600 text-white px-4 py-1.5 rounded-full font-bold text-xs hover:bg-yellow-700 transition-colors shadow-md flex items-center gap-2"
             >
-                <span>👤</span> Iniciar Sesión
+                <span>👤</span> <span className="hidden lg:inline">Ingresar</span>
             </Link>
           </div>
 
-          {/* --- BOTÓN HAMBURGUESA (Solo visible en móvil) --- */}
+          {/* Botón Hamburguesa (Móvil) */}
           <button 
-            className="md:hidden text-gray-300 hover:text-white focus:outline-none z-50"
+            className="md:hidden text-gray-700 hover:text-yellow-700 focus:outline-none z-50 ml-auto"
             onClick={() => setIsOpen(!isOpen)}
           >
-            
             {isOpen ? (
-                <span className="text-3xl font-bold">✕</span>
+                <span className="text-2xl font-bold">✕</span>
             ) : (
-                <span className="text-3xl font-bold">☰</span>
+                <span className="text-2xl font-bold">☰</span>
             )}
           </button>
 
         </div>
       </div>
 
-      {/* --- MENÚ MÓVIL DESPLEGABLE --- */}
-      {/* Se muestra solo si isOpen es true */}
-      <div className={`md:hidden bg-gray-800 absolute top-20 left-0 w-full shadow-2xl transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100 py-6' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+     
+      <div className={`md:hidden bg-yellow-50 absolute top-16 left-0 w-full shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100 py-6 border-b-4 border-yellow-600' : 'max-h-0 opacity-0 overflow-hidden'}`}>
         <div className="flex flex-col space-y-4 px-6">
-            
             <Link 
                 href="/" 
-                className="text-lg font-bold text-white hover:text-yellow-400 border-b border-gray-700 pb-2"
+                className="text-sm font-bold text-gray-800 hover:text-yellow-600 border-b border-yellow-200 pb-2 uppercase"
                 onClick={closeMenu}
             >
-                Inicio
+                INICIO
             </Link>
 
-            {/* Submenú Móvil */}
-            <div>
-                <button 
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="flex justify-between w-full text-lg font-bold text-white hover:text-yellow-400 border-b border-gray-700 pb-2"
+            {categories.map((cat) => (
+                <Link 
+                    key={cat.id}
+                    href={cat.name.toLowerCase().includes('noticias') ? '/noticias' : `/categoria/${cat.slug}`}
+                    className="block text-gray-700 font-semibold hover:text-yellow-700 py-1 uppercase text-xs"
+                    onClick={closeMenu}
                 >
-                    Temas Apícolas <span>{isDropdownOpen ? '▲' : '▼'}</span>
-                </button>
-                
-                {/* Lista de categorías en móvil */}
-                <div className={`${isDropdownOpen ? 'block' : 'hidden'} pl-4 mt-2 space-y-2`}>
-                    {categories.map((cat) => (
-                        <Link 
-                            key={cat.id}
-                            href={cat.name.toLowerCase().includes('noticias') ? '/noticias' : `/categoria/${cat.slug}`}
-                            className="block text-gray-300 hover:text-yellow-500 py-1"
-                            onClick={closeMenu}
-                        >
-                            🍯 {cat.name}
-                        </Link>
-                    ))}
-                </div>
-            </div>
+                    {cat.name}
+                </Link>
+            ))}
 
             <Link 
                 href="/login" 
-                className="bg-yellow-500 text-gray-900 text-center py-3 rounded-lg font-bold hover:bg-yellow-400 transition-colors"
+                className="mt-4 bg-yellow-600 text-white text-center py-2 rounded-lg font-bold text-xs hover:bg-yellow-700 transition-colors shadow-sm uppercase"
                 onClick={closeMenu}
             >
                 Iniciar Sesión
             </Link>
-
         </div>
       </div>
     </nav>

@@ -1,0 +1,118 @@
+🐝 Bitácora Técnica de Desarrollo: Proyecto b-maia
+Fecha: 07 de Febrero, 2026 Proyecto: Plataforma de Noticias Apícolas Automatizada
+
+1. Resumen 
+El objetivo del proyecto es crear un portal web centralizado para la industria apícola que recopile, filtre y presente noticias relevantes de manera automática. El sistema utiliza Inteligencia Artificial para clasificar contenido técnico y de mercado, asignando imágenes temáticas para mejorar la experiencia visual.
+
+2. Stack Tecnológico (Tecnologías utilizadas)
+Frontend: Next.js 14 (React) + Tailwind CSS (Estilos).
+
+Backend: Python + Django Rest Framework (API).
+
+Base de Datos: SQLite (Entorno local).
+
+Automatización & AI: n8n (Workflow de Agentes IA).
+
+Fuentes de Datos: RSS Feeds + Unsplash API (Imágenes).
+
+
+# Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # (o venv\Scripts\activate en Windows)
+
+# Instalación de dependencias
+pip install django djangorestframework django-cors-headers
+
+# Creación del proyecto y app
+django-admin startproject backend
+cd backend
+python manage.py startapp api
+
+
+# Creación del proyecto con TypeScript y Tailwind
+npx create-next-app@latest frontend
+# (Selección: TypeScript: Yes, Tailwind: Yes, App Router: Yes)
+
+# Instalación de librerías adicionales
+npm install lucide-react  # Iconos
+
+. Fase 2: Desarrollo de la Lógica de Negocio (Backend)
+A. Modelado de Datos
+Se diseñó la estructura de la base de datos para soportar noticias generadas por IA.
+
+Cambio Crítico: Originalmente el campo de imagen esperaba un archivo (ImageField). Se modificó a URLField para permitir que la IA inyecte enlaces directos de bancos de imágenes sin necesidad de descarga física.
+
+Código Clave (models.py):
+
+Python
+
+class Article(models.Model):
+    title = models.CharField(max_length=200)
+    # Cambio estratégico para integración con n8n:
+    image = models.URLField(max_length=500, blank=True, null=True) 
+    category = models.ForeignKey(Category, related_name='articles', on_delete=models.CASCADE)
+    # ... otros campos (content, excerpt, slug, etc.)
+
+migraciones 
+python manage.py makemigrations
+python manage.py migrate
+
+5. Fase 3: Automatización e Inteligencia Artificial (n8n)
+Se implementó un "Agente Periodista" en n8n que lee noticias RSS y las procesa.
+
+A. Lógica del Prompt (Cerebro de la IA)
+El prompt fue diseñado utilizando documentos técnicos de la industria  para asegurar que la IA distinga entre temas de Producción, Sanidad, Mercado y Tecnología.
+
+Características del Prompt:
+
+
+Filtro Técnico: Se integraron palabras clave del documento PALABRAS CLAVES (1).doc (ej: Varroa, Ecofisiología, Polinización) para clasificar las noticias con precisión.
+
+Sistema Anti-Repetición de Imágenes: Se configuró una galería cerrada de 9 imágenes de alta calidad (divididas en grupos: Flores, Apiarios, Apicultores, Productos) para evitar que todas las noticias tengan la misma foto.
+
+Formato de Salida: JSON estructurado compatible con la API de Django.
+
+B. Flujo de Trabajo (Workflow)
+Trigger: Lectura de RSS cada X tiempo.
+
+AI Agent: Procesa texto, asigna categoría geográfica (Norteamérica, Europa, etc.) y selecciona imagen.
+
+HTTP Request: Envía los datos limpios a http://127.0.0.1:8000/api/articles/.
+
+6. Fase 4: Diseño de Interfaz y Experiencia de Usuario (Frontend)
+A. Identidad Visual (Branding)
+
+Logo: Se extrajo y optimizó el logo "MaiA" desde los archivos originales del proyecto.
+
+Paleta de Colores: Se implementó un esquema de colores "Amarillo/Miel" (bg-yellow-50, border-yellow-600) para reforzar la identidad apícola.
+
+B. Barra de Navegación (Navbar)
+Se desarrolló un componente de navegación personalizado con las siguientes características:
+
+Diseño: Barra "Sticky" (fija al hacer scroll).
+
+Layout: Distribución simétrica (Logo Izquierda, Menú Centro, Login Derecha).
+
+Responsive: Menú hamburguesa para móviles y lista horizontal con scroll oculto para escritorio.
+
+Código CSS Clave (Ocultar Scrollbar):
+
+CSS
+
+/* Utilidad para limpieza visual en el menú de categorías */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+C. Visualización de Noticias
+Se creó una grilla dinámica que consume la API de Django. Si la noticia trae una imagen de la IA, la muestra; si no, utiliza un "fallback" (imagen por defecto) para mantener la estética.
+
+7. Estado Actual y Próximos Pasos
+Estado: El sistema es capaz de auto-abastecerse de noticias, clasificarlas geográficamente y presentarlas en una interfaz web moderna y responsiva.
+
+Logro Reciente: Se solucionó la duplicidad de imágenes implementando una lógica de selección aleatoria controlada en el prompt de la IA.
+
+Próximo paso: Despliegue en servidor de producción (Deploy).
