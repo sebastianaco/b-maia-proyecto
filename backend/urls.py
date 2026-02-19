@@ -1,22 +1,38 @@
 from django.contrib import admin
 from django.urls import path
-from core import views # Importamos nuestras vistas
+from core import views 
 from django.conf import settings
 from django.conf.urls.static import static
+
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # --- RUTAS DE LA API ---
-    # Esta ruta entrega la lista de todas las noticias
-    path('api/articles/', views.get_articles),
+   
+   
+    path('api/register/', views.register_user, name='register'),
     
-    # Esta ruta entrega una noticia específica
-    path('api/articles/<slug:slug>/', views.get_article_detail),
-    path('api/create-article/', views.create_article_from_ai),
-    path('api/categories/', views.get_categories),
+    
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    
+    
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    
+    path('api/articles/', views.get_articles, name='get_articles'),
+    
+  
+    path('api/create-article/', views.create_article_from_ai, name='create_article_from_ai'),
+    
+    path('api/articles/<slug:slug>/', views.get_article_detail, name='get_article_detail'),
+    path('api/categories/', views.get_categories, name='get_categories'),
 ]
 
-# Configuración para ver las imágenes mientras desarrollamos
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// 1. Definimos las interfaces de datos
+
 interface Article {
   id: number;
   title: string;
@@ -29,7 +29,7 @@ async function getCategoryArticles(slug: string): Promise<Article[]> {
     
     const allArticles: Article[] = await res.json();
 
-    // Normalizamos texto (quitar tildes, mayúsculas) para comparar mejor
+    
     const normalize = (text: string) => 
       text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-");
 
@@ -63,7 +63,7 @@ export default async function CategoryPage({ params }: Props) {
     <main className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
         
-        {/* Encabezado de la Categoría */}
+        
         <div className="text-center mb-12">
             <span className="text-yellow-600 font-bold tracking-widest text-sm uppercase">
                 Categoría
@@ -74,7 +74,7 @@ export default async function CategoryPage({ params }: Props) {
             <div className="w-24 h-1 bg-yellow-500 mx-auto mt-6 rounded-full"></div>
         </div>
 
-        {/* Grilla de Noticias Filtradas */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.length > 0 ? (
             articles.map((article) => (

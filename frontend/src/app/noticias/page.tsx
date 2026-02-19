@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-// Interfaz de la noticia
+
 interface Article {
   id: number;
   title: string;
@@ -12,7 +12,7 @@ interface Article {
   created_at: string;
 }
 
-// Función para traer TODAS las noticias
+
 async function getArticles(): Promise<Article[]> {
   try {
     
@@ -44,7 +44,7 @@ export default async function NoticiasPage() {
             <div className="w-24 h-1 bg-yellow-500 mx-auto mt-6 rounded-full"></div>
         </div>
 
-        {/* Grilla de Noticias */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.length > 0 ? (
             articles.map((article) => (
@@ -102,7 +102,7 @@ export default async function NoticiasPage() {
           )}
         </div>
 
-        {/* Botón para volver al inicio */}
+        
         <div className="mt-12 text-center">
             <Link href="/" className="text-gray-500 hover:text-yellow-600 font-medium">
                 ← Volver al Inicio

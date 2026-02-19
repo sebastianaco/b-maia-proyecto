@@ -1,42 +1,48 @@
 🐝 Bitácora Técnica de Desarrollo: Proyecto b-maia
-Fecha: 07 de Febrero, 2026 Proyecto: Plataforma de Noticias Apícolas Automatizada
+Fecha: 19 de Febrero, 2026
+Proyecto: Plataforma de Noticias Apícolas Automatizada
 
-1. Resumen 
-El objetivo del proyecto es crear un portal web centralizado para la industria apícola que recopile, filtre y presente noticias relevantes de manera automática. El sistema utiliza Inteligencia Artificial para clasificar contenido técnico y de mercado, asignando imágenes temáticas para mejorar la experiencia visual.
+Resumen
+El objetivo del proyecto es crear un portal web centralizado para la industria apícola que recopile, filtre y presente noticias relevantes de manera automática. El sistema utiliza Inteligencia Artificial para clasificar contenido técnico y de mercado, asignando imágenes temáticas para mejorar la experiencia visual. Se incluye una interfaz de usuario interactiva con gestión de perfiles.
 
-2. Stack Tecnológico (Tecnologías utilizadas)
+Stack Tecnológico (Tecnologías utilizadas)
 Frontend: Next.js 14 (React) + Tailwind CSS (Estilos).
-
 Backend: Python + Django Rest Framework (API).
-
 Base de Datos: SQLite (Entorno local).
-
 Automatización & AI: n8n (Workflow de Agentes IA).
-
 Fuentes de Datos: RSS Feeds + Unsplash API (Imágenes).
 
+Configuración Inicial de Entornos
+Crear entorno virtual:
 
-# Crear entorno virtual
+Bash
+
 python -m venv venv
 source venv/bin/activate  # (o venv\Scripts\activate en Windows)
+Instalación de dependencias backend:
 
-# Instalación de dependencias
+Bash
+
 pip install django djangorestframework django-cors-headers
+Creación del proyecto y app:
 
-# Creación del proyecto y app
+Bash
+
 django-admin startproject backend
 cd backend
 python manage.py startapp api
+Creación del proyecto frontend con TypeScript y Tailwind:
 
+Bash
 
-# Creación del proyecto con TypeScript y Tailwind
 npx create-next-app@latest frontend
 # (Selección: TypeScript: Yes, Tailwind: Yes, App Router: Yes)
+Instalación de librerías adicionales:
 
-# Instalación de librerías adicionales
+Bash
+
 npm install lucide-react  # Iconos
-
-. Fase 2: Desarrollo de la Lógica de Negocio (Backend)
+Fase 2: Desarrollo de la Lógica de Negocio (Backend)
 A. Modelado de Datos
 Se diseñó la estructura de la base de datos para soportar noticias generadas por IA.
 
@@ -52,34 +58,35 @@ class Article(models.Model):
     image = models.URLField(max_length=500, blank=True, null=True) 
     category = models.ForeignKey(Category, related_name='articles', on_delete=models.CASCADE)
     # ... otros campos (content, excerpt, slug, etc.)
+Migraciones:
 
-migraciones 
+Bash
+
 python manage.py makemigrations
 python manage.py migrate
-
-5. Fase 3: Automatización e Inteligencia Artificial (n8n)
+Fase 3: Automatización e Inteligencia Artificial (n8n)
 Se implementó un "Agente Periodista" en n8n que lee noticias RSS y las procesa.
 
 A. Lógica del Prompt (Cerebro de la IA)
-El prompt fue diseñado utilizando documentos técnicos de la industria  para asegurar que la IA distinga entre temas de Producción, Sanidad, Mercado y Tecnología.
+El prompt fue diseñado utilizando documentos técnicos de la industria para asegurar que la IA distinga entre temas de Producción, Sanidad, Mercado y Tecnología.
 
 Características del Prompt:
 
-
-Filtro Técnico: Se integraron palabras clave del documento PALABRAS CLAVES (1).doc (ej: Varroa, Ecofisiología, Polinización) para clasificar las noticias con precisión.
+Filtro Técnico: Se integraron palabras clave del documento original (ej: Varroa, Ecofisiología, Polinización) para clasificar las noticias con precisión.
 
 Sistema Anti-Repetición de Imágenes: Se configuró una galería cerrada de 9 imágenes de alta calidad (divididas en grupos: Flores, Apiarios, Apicultores, Productos) para evitar que todas las noticias tengan la misma foto.
 
 Formato de Salida: JSON estructurado compatible con la API de Django.
 
 B. Flujo de Trabajo (Workflow)
+
 Trigger: Lectura de RSS cada X tiempo.
 
-AI Agent: Procesa texto, asigna categoría geográfica (Norteamérica, Europa, etc.) y selecciona imagen.
+AI Agent: Procesa texto, asigna categoría geográfica y selecciona imagen.
 
 HTTP Request: Envía los datos limpios a http://127.0.0.1:8000/api/articles/.
 
-6. Fase 4: Diseño de Interfaz y Experiencia de Usuario (Frontend)
+Fase 4: Diseño de Interfaz y Experiencia de Usuario (Frontend)
 A. Identidad Visual (Branding)
 
 Logo: Se extrajo y optimizó el logo "MaiA" desde los archivos originales del proyecto.
@@ -87,32 +94,50 @@ Logo: Se extrajo y optimizó el logo "MaiA" desde los archivos originales del pr
 Paleta de Colores: Se implementó un esquema de colores "Amarillo/Miel" (bg-yellow-50, border-yellow-600) para reforzar la identidad apícola.
 
 B. Barra de Navegación (Navbar)
-Se desarrolló un componente de navegación personalizado con las siguientes características:
 
-Diseño: Barra "Sticky" (fija al hacer scroll).
+Diseño: Barra "Sticky" con separación ajustada entre elementos para mejor legibilidad.
 
-Layout: Distribución simétrica (Logo Izquierda, Menú Centro, Login Derecha).
+Layout: Logo a la izquierda, Menú de categorías centrado, Control de usuario a la derecha.
 
-Responsive: Menú hamburguesa para móviles y lista horizontal con scroll oculto para escritorio.
+Menú de Usuario: Implementación de Dropdown interactivo para escritorio y adaptación para menú hamburguesa en móviles.
 
-Código CSS Clave (Ocultar Scrollbar):
+Utilidad CSS Clave (Ocultar Scrollbar):
 
 CSS
 
-/* Utilidad para limpieza visual en el menú de categorías */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-C. Visualización de Noticias
-Se creó una grilla dinámica que consume la API de Django. Si la noticia trae una imagen de la IA, la muestra; si no, utiliza un "fallback" (imagen por defecto) para mantener la estética.
+C. Visualización de Noticias y Publicidad
 
-7. Estado Actual y Próximos Pasos
-Estado: El sistema es capaz de auto-abastecerse de noticias, clasificarlas geográficamente y presentarlas en una interfaz web moderna y responsiva.
+Grilla dinámica consumiendo la API de Django.
 
-Logro Reciente: Se solucionó la duplicidad de imágenes implementando una lógica de selección aleatoria controlada en el prompt de la IA.
+Integración de tarjetas de publicidad estáticas intercaladas en el flujo de noticias (Módulo de Miel Orgánica y Suscripción a Boletín).
 
-Próximo paso: Despliegue en servidor de producción (Deploy).
+D. Rediseño de Footer
+
+Transición a "Modo Claro" (fondo bg-yellow-100) con textos en alto contraste (text-gray-800 y text-yellow-800) para garantizar la legibilidad y mantener la coherencia corporativa.
+
+Fase 5: Módulo de Usuario y Autenticación (Frontend)
+A. Simulación de Autenticación
+
+Creación de vista de Login (/login) con diseño acoplado al branding.
+
+Implementación temporal de guardado de sesión en localStorage para pruebas de navegación.
+
+B. Panel de Perfil de Usuario (/profile)
+
+Creación de un Dashboard personal con generación dinámica de avatar basado en el nombre de usuario.
+
+Implementación de formulario de datos de contacto (Nombre, Apellido, RUT, Correo, Teléfono, Dirección).
+
+Lógica de edición bidireccional y guardado en memoria local.
+
+Regla de Negocio UI: Los campos "Nombre" y "Apellido", una vez completados y guardados por primera vez, pasan a un estado de bloqueo visual (Solo lectura / 🔒 Fijo), permitiendo edición continua solo en los datos de contacto y RUT.
+
+Estado Actual 
+Estado: El sistema extrae noticias mediante IA de forma autónoma y las renderiza en una interfaz web robusta. El frontend cuenta con un sistema simulado de usuarios, panel de perfil interactivo y lógica de lectura/escritura en caché del navegador.

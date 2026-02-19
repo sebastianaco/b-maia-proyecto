@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-// Interfaz de la noticia
+
 interface Article {
   id: number;
   title: string;
@@ -17,10 +17,10 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Buscamos la noticia específica
+
 async function getArticle(slug: string): Promise<Article | null> {
   try {
-    // Traemos todas y buscamos la correcta (Método seguro para prototipos)
+    
     const res = await fetch("http://127.0.0.1:8000/api/articles/", {
       cache: "no-store",
     });
@@ -39,21 +39,21 @@ export default async function NoticiaPage({ params }: Props) {
   const article = await getArticle(slug);
 
   if (!article) {
-    notFound(); // Si no existe, manda a página 404
+    notFound(); 
   }
 
   return (
     <main className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4 max-w-4xl">
         
-        {/* Botón Volver */}
+        
         <Link href="/" className="text-yellow-600 font-bold hover:underline mb-6 inline-block">
           ← Volver a Noticias
         </Link>
 
         <article className="bg-white rounded-2xl shadow-xl overflow-hidden">
             
-            {/* Imagen Principal */}
+           
             <div className="relative h-64 md:h-96 w-full bg-gray-200">
                 {article.image ? (
                     <img
@@ -69,7 +69,7 @@ export default async function NoticiaPage({ params }: Props) {
             </div>
 
             <div className="p-8 md:p-12">
-                {/* Categoría y Fecha */}
+               
                 <div className="flex items-center gap-4 mb-6 text-sm">
                     <span className="bg-yellow-400 text-yellow-900 font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                         {article.category_name}
@@ -79,7 +79,7 @@ export default async function NoticiaPage({ params }: Props) {
                     </span>
                 </div>
 
-                {/* Título */}
+                
                 <h1 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-8 leading-tight">
                     {article.title}
                 </h1>
