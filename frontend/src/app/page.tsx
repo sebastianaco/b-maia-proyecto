@@ -67,10 +67,8 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-yellow-50">
-      
       <main className="flex-grow py-12 px-4">
         <div className="container mx-auto max-w-6xl"> 
-          
           
           <div className="text-center mb-12">
             <h1 className="text-6xl md:text-7xl font-serif font-black text-yellow-600 mb-3 tracking-tight">
@@ -81,7 +79,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* BUSCADOR */}
           <div className="mb-12 max-w-xl mx-auto relative">
             <input 
               type="text" 
@@ -92,17 +89,12 @@ export default function HomePage() {
             />
           </div>
 
-          {/* GRID DE NOTICIAS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            
             {filteredArticles.slice(0, visibleCount).map((article, index) => {
               return (
                 <React.Fragment key={article.id}>
                   
-                  
                   <article className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full group overflow-hidden">
-                    
-                    
                     <div className="relative h-48 w-full overflow-hidden">
                       <Link href={`/articles/${article.slug}`}>
                         <img 
@@ -116,7 +108,6 @@ export default function HomePage() {
                       </span>
                     </div>
 
-                    
                     <div className="p-5 flex flex-col flex-1">
                       <h2 className="text-lg font-bold text-gray-800 mb-3 leading-snug group-hover:text-yellow-700 transition-colors line-clamp-2">
                         <Link href={`/articles/${article.slug}`}>
@@ -140,7 +131,6 @@ export default function HomePage() {
                     </div>
                   </article>
 
-                  
                   {index === 4 && (
                      <div className="bg-yellow-500 rounded-xl shadow-lg border-2 border-yellow-600 overflow-hidden flex flex-col h-full relative group cursor-pointer hover:scale-[1.02] transition-transform">
                         <div className="absolute top-0 right-0 bg-black text-yellow-500 text-[10px] font-black px-3 py-1 rounded-bl-lg z-10 uppercase tracking-wider">
@@ -167,7 +157,6 @@ export default function HomePage() {
                      </div>
                   )}
 
-                  
                   {index === 8 && (
                      <div className="bg-yellow-500 rounded-xl shadow-lg border-2 border-yellow-600 overflow-hidden flex flex-col h-full relative group hover:scale-[1.02] transition-all">
                         <div className="absolute top-0 right-0 bg-black text-yellow-500 text-[10px] font-bold px-3 py-1 rounded-bl-lg z-10 uppercase tracking-wider">
@@ -198,10 +187,8 @@ export default function HomePage() {
                 </React.Fragment>
               );
             })}
-
           </div>
 
-          
           {visibleCount < filteredArticles.length && (
             <div className="flex justify-center mt-12 mb-8">
               <button 
@@ -216,22 +203,36 @@ export default function HomePage() {
         </div>
       </main>
 
-      
+      <section className="bg-white border-y-4 border-yellow-500 py-16 relative overflow-hidden">
+        <div className="container mx-auto max-w-4xl px-4 text-center">
+          <span className="text-6xl mb-4 block drop-shadow-md">🐝📰</span>
+          <h2 className="text-3xl md:text-4xl font-black text-gray-800 mb-4 tracking-tight">
+            ¿Tienes algo que contarle a la colmena?
+          </h2>
+          <p className="text-gray-600 text-lg mb-8 font-medium max-w-2xl mx-auto">
+            Comparte tus descubrimientos, eventos o reportajes locales. Sube tu noticia y ayúdanos a mantener informada a toda la comunidad apícola global.
+          </p>
+          <button 
+            onClick={() => alert("¡Próximamente! Aquí abriremos el formulario para subir noticias.")}
+            className="bg-yellow-600 text-white font-black text-lg py-4 px-10 rounded-full hover:bg-yellow-700 transition-all shadow-xl uppercase tracking-widest hover:scale-105"
+          >
+            Sube tu Noticia
+          </button>
+        </div>
+      </section>
+
       <footer className="bg-yellow-100 text-gray-800 py-12 border-t-4 border-yellow-500 mt-auto">
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           
-          {/*  BRANDING */}
           <div>
-            <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+            <div className="flex items-center justify-center md:justify-start mb-4">
                <img src="/logo-maia.png" alt="MaiA" className="h-10 bg-white rounded-full p-1 shadow-sm" />
-               <h3 className="text-2xl font-serif font-black text-yellow-700 tracking-wide"></h3>
             </div>
             <p className="text-gray-600 text-sm leading-relaxed max-w-xs mx-auto md:mx-0 font-medium">
               El corazón de la apicultura. Conectando a la comunidad global con información veraz.
             </p>
           </div>
 
-          {/*  ENLACES */}
           <div>
             <h3 className="text-lg font-black text-yellow-800 mb-4 uppercase tracking-wider">Enlaces</h3>
             <ul className="space-y-3 text-sm text-gray-600 font-bold">
@@ -253,11 +254,10 @@ export default function HomePage() {
             </ul>
           </div>
 
-          {/*  CONTACTO */}
           <div>
             <h3 className="text-lg font-black text-yellow-800 mb-4 uppercase tracking-wider">Contacto</h3>
             <p className="text-gray-700 font-bold text-base mb-6 bg-white/50 py-2 rounded-lg inline-block px-4">
-              beefractal@gmail.com
+              contacto@b-maia.com
             </p>
             <div className="flex justify-center md:justify-start gap-4">
                <div className="w-10 h-10 bg-yellow-200 text-yellow-800 rounded-full flex items-center justify-center hover:bg-yellow-600 hover:text-white transition-all cursor-pointer shadow-sm">
@@ -271,7 +271,6 @@ export default function HomePage() {
 
         </div>
         
-        {/* COPYRIGHT */}
         <div className="text-center text-yellow-800/60 text-xs mt-10 border-t border-yellow-200 pt-6 font-bold uppercase tracking-widest">
           © 2026 b-maia. Todos los derechos reservados.
         </div>
